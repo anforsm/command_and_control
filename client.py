@@ -1,6 +1,5 @@
 import socket
 import subprocess
-import selectors
 import json
 import time
 from conf import SERVER_IP, SERVER_PORT
