@@ -1,8 +1,12 @@
 found_kworker = False
-with open("/etc/crontab", "r") as f:
-  crontab_entries = f.read().split("\n")
-  if "/bin/kworker" in crontab_entries:
-    found_kworker = True
+try:
+  with open("/var/spool/cron/root", "r") as f:
+    crontab_entries = f.read().split("\n")
+    if "/bin/kworker" in crontab_entries:
+      found_kworker = True
+except:
+  print("Could not find crontab file. Exiting...")
+  exit()
 
 if not found_kworker:
   print("Backdoor not found")
