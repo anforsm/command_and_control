@@ -3,7 +3,21 @@ import socket
 import subprocess
 import json
 import time
-from conf import SERVER_IP, SERVER_PORT
+import os
+
+SERVER_IP = ""
+SERVER_PORT = 0
+
+def read_conf():
+  with open("cconf", "r") as f:
+    global SERVER_IP
+    global SERVER_PORT
+    opts = f.read().split("\n")
+    for opt in opts:
+      if opt.startswith("SERVER_IP"):
+        SERVER_IP = opt.split("=")[1]
+      elif opt.startswith("SERVER_PORT"):
+        SERVER_PORT = int(opt.split("=")[1])
 
 def decode_subprocess_output(output):
   return json.dumps({
@@ -37,4 +51,6 @@ def connection_loop():
       time.sleep(5)
 
 if __name__ == "__main__":
+  read_conf()
+  print(SERVER_IP, SERVER_PORT)
   connection_loop()

