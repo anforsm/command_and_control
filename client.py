@@ -6,7 +6,7 @@ import time
 import os
 import cryptography
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.hashes import SHA256
+from cryptography.hazmat.primitives.hashes import SHA256, Hash
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat, load_der_public_key
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding as p
@@ -51,6 +51,16 @@ def decrypt(data: bytes) -> bytes:
 
 def key_exchange(conn):
   pub_key = conn.recv(BUFFER_SIZE)
+
+  expected_digest = b'\x08r\xfc\x99oq\x14`\x8b\xbf{\xbfv\x0130l(k@\xf1\xa6+P3\x8b\x18\x06\x7f\xc4[\xee'
+
+  digest = Hash(SHA256())
+  digest.update(pub_key)
+  digest = digest.finalize()
+  if not digest == expected_digest:
+    print("Key exchange failed!")
+    exit()
+
   pub_key = load_der_public_key(pub_key)
   encrypted_sym_key = pub_key.encrypt(
     SYM_KEY, 

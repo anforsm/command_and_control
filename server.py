@@ -4,8 +4,8 @@ import json
 import os
 import cryptography
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
-from cryptography.hazmat.primitives.hashes import SHA256
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat, PrivateFormat, NoEncryption, load_pem_private_key
+from cryptography.hazmat.primitives.hashes import SHA256, Hash
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding as p
 
@@ -48,13 +48,34 @@ def decrypt(data: bytes) -> bytes:
 
 
 def key_exchange(conn):
-  priv_key = rsa.generate_private_key(
-    public_exponent=65537,
-    key_size=2048
-  )
+  with open("priv_key.pem", "rb") as f:
+    priv_key = load_pem_private_key(
+      f.read(),
+      password=None,
+    )
+  # Private key generated with:
+  # priv_key = rsa.generate_private_key(
+  #   public_exponent=65537,
+  #   key_size=2048
+  # ).private_bytes(
+  #   Encoding.PEM,
+  #   PrivateFormat.PKCS8,
+  #   NoEncryption()
+  # )
+
+  expected_digest = b'\x08r\xfc\x99oq\x14`\x8b\xbf{\xbfv\x0130l(k@\xf1\xa6+P3\x8b\x18\x06\x7f\xc4[\xee'
+
   pub_key = priv_key.public_key()
+  pub_key_bytes = pub_key.public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
+  digest = Hash(SHA256())
+  digest.update(pub_key_bytes)
+  digest = digest.finalize()
+  if not digest == expected_digest:
+    print("Key exchange failed!")
+    exit()
+
   # send public key to client 
-  conn.send(pub_key.public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo))
+  conn.send(pub_key_bytes)
   # get symmetric key from server
   sym_key = conn.recv(BUFFER_SIZE)
   global SYM_KEY
