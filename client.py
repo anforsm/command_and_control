@@ -15,9 +15,9 @@ def read_conf():
     opts = f.read().split("\n")
     for opt in opts:
       if opt.startswith("SERVER_IP"):
-        SERVER_IP = opt.split("=")[1]
+        SERVER_IP = opt.split("=")[1].strip()
       elif opt.startswith("SERVER_PORT"):
-        SERVER_PORT = int(opt.split("=")[1])
+        SERVER_PORT = int(opt.split("=")[1].strip())
 
 def decode_subprocess_output(output):
   return json.dumps({
@@ -52,5 +52,4 @@ def connection_loop():
 
 if __name__ == "__main__":
   read_conf()
-  print(SERVER_IP, SERVER_PORT)
   connection_loop()
