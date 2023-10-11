@@ -1,2 +1,2 @@
 SERVER_PORT = 43813
-SERVER_IP = localhost
+SERVER_IP = 127.0.0.1
