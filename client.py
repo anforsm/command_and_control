@@ -9,7 +9,7 @@ SERVER_IP = ""
 SERVER_PORT = 0
 
 def read_conf():
-  with open("cconf", "r") as f:
+  with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "cconf"), "r") as f:
     global SERVER_IP
     global SERVER_PORT
     opts = f.read().split("\n")
