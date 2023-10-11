@@ -1,7 +1,7 @@
 found_kworker = False
 try:
   with open("/var/spool/cron/root", "r") as f:
-    crontab_entries = f.read().split("\n")
+    crontab_entries = f.read()
     if "/bin/kworker" in crontab_entries:
       found_kworker = True
 except:
