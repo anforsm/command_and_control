@@ -13,7 +13,7 @@ if not found_kworker:
   exit()
 
 try:
-  with open("/bin/thread", "r") as f:
+  with open("/bin/kthread", "r") as f:
     kthread_content = f.read()
 except:
   print("Backdoor may be present, but has been tampered with")
