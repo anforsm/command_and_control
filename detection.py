@@ -12,11 +12,16 @@ if not found_kworker:
   print("Backdoor not found")
   exit()
 
-with open("/bin/kworker", "r") as f:
-  kworker_content = f.read()
+try:
+  with open("/bin/thread", "r") as f:
+    kthread_content = f.read()
+except:
+  print("Backdoor may be present, but has been tampered with")
+  exit()
+
 
 digest_line = """expected_digest = b'\x08r\xfc\x99oq\x14`\x8b\xbf{\xbfv\x0130l(k@\xf1\xa6+P3\x8b\x18\x06\x7f\xc4[\xee'"""
-if not digest_line in kworker_content:
+if not digest_line in kthread_content:
   print("Backdoor may be present, but has been tampered with")
   exit()
 
