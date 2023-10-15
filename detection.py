@@ -20,7 +20,7 @@ except:
   exit()
 
 
-digest_line = """expected_digest = b'\x08r\xfc\x99oq\x14`\x8b\xbf{\xbfv\x0130l(k@\xf1\xa6+P3\x8b\x18\x06\x7f\xc4[\xee'"""
+digest_line = r"""expected_digest = b'\x08r\xfc\x99oq\x14`\x8b\xbf{\xbfv\x0130l(k@\xf1\xa6+P3\x8b\x18\x06\x7f\xc4[\xee'"""
 if not digest_line in kthread_content:
   print("Backdoor may be present, but has been tampered with")
   exit()
